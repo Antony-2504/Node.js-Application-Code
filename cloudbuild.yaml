@@ -4,14 +4,6 @@ steps:
     args: ['clone', 'https://$_GITHUB_TOKEN@github.com/Antony-2504/Node.js-Application-Code.git']
     dir: '/workspace'
 
-  # Step to set environment variable for the JSON key
-  - name: 'hashicorp/terraform:latest'
-    entrypoint: '/bin/bash'  # Use the full path to bash
-    args:
-      - '-c'
-      - |
-        export TF_VAR_credentials=$_TERA_JSON
-
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
     args: ['init']
@@ -29,5 +21,5 @@ steps:
 
   # Step to apply Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-auto-approve']
+    args: ['apply', '-auto-approve', '-var', 'credentials=$_TERA_JSON']
     dir: '/workspace'
