@@ -1,12 +1,7 @@
 provider "google" {
-  credentials = jsondecode(var.my_credentials)
+  credentials = file("gs://tera02/tera.json")
   project     = "able-river-419007"
   region      = "us-central1"
-}
-
-variable "my_credentials" {
-  type    = string
-  default = ""
 }
 
 resource "google_compute_instance" "demo-instance" {
