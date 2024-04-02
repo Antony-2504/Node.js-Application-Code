@@ -4,6 +4,14 @@ steps:
     args: ['clone', 'https://$_GITHUB_TOKEN@github.com/Antony-2504/Node.js-Application-Code.git']
     dir: '/workspace'
 
+  # Step to create the /workspace/secrets directory
+  - name: 'gcr.io/cloud-builders/mkdir'
+    args: ['-p', '/workspace/secrets']
+
+  # Step to copy the JSON key from Cloud Storage to /workspace/secrets/tera_sec.json
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://tera02/tera.json', '/workspace/secrets/tera_sec.json']
+
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
     args: ['init']
