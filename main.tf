@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = var.credentials
+  credentials = jsondecode(file("/secrets/terra_sec.json"))
   project     = "able-river-419007"
   region      = "us-central1"
 }
