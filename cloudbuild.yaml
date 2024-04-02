@@ -5,8 +5,10 @@ steps:
     dir: '/workspace'
 
   # Step to create the /workspace/secrets directory
-  - name: 'gcr.io/cloud-builders/mkdir'
-    args: ['-p', '/workspace/secrets']
+  - name: 'bash'
+    args:
+      - '-c'
+      - 'mkdir -p /workspace/secrets'
 
   # Step to copy the JSON key from Cloud Storage to /workspace/secrets/tera_sec.json
   - name: 'gcr.io/cloud-builders/gsutil'
