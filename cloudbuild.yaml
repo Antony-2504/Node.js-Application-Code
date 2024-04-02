@@ -14,20 +14,24 @@ steps:
 
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
+    entrypoint: 'bash'
     args: ['init']
     dir: '/workspace'
 
   # Step to validate Terraform configuration
   - name: 'hashicorp/terraform:latest'
+    entrypoint: 'bash'
     args: ['validate']
     dir: '/workspace'
 
   # Step to plan Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['plan']
+    entrypoint: 'bash'
+    args: ['plan', '-var', 'my_credentials=$TERRA_SEC']
     dir: '/workspace'
 
   # Step to apply Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-auto-approve']
+    entrypoint: 'bash'
+    args: ['apply', '-auto-approve', '-var', 'my_credentials=$TERRA_SEC']
     dir: '/workspace'
