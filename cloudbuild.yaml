@@ -6,7 +6,7 @@ steps:
 
   # Step to set environment variable for the JSON key
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'bash'
+    entrypoint: '/bin/bash'  # Use the full path to bash
     args:
       - '-c'
       - |
