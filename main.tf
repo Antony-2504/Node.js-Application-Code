@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("$_TERA_JSON")
+  credentials = var.credentials
   project     = "able-river-419007"
   region      = "us-central1"
 }
