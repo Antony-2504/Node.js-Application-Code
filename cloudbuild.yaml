@@ -5,41 +5,29 @@ steps:
     dir: '/workspace'
 
   # Step to set environment variable for the JSON key
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: 'hashicorp/terraform:latest'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        echo 'export TF_VAR_credentials=$$_TERA_JSON' >> $BASH_ENV
+        export TF_VAR_credentials=$_TERA_JSON
 
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        terraform init
+    args: ['init']
+    dir: '/workspace'
 
   # Step to validate Terraform configuration
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        terraform validate
+    args: ['validate']
+    dir: '/workspace'
 
   # Step to plan Terraform changes
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        terraform plan
+    args: ['plan']
+    dir: '/workspace'
 
   # Step to apply Terraform changes
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        terraform apply -auto-approve
+    args: ['apply', '-auto-approve']
+    dir: '/workspace'
