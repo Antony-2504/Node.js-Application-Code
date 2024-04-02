@@ -6,20 +6,40 @@ steps:
 
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
-    args: ['init']
-    dir: '/workspace'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "export TF_VAR_credentials=\$$_TERA_JSON" >> /workspace/env.sh
+    env:
+      - '_TERA_JSON=$_TERA_JSON'
 
   # Step to validate Terraform configuration
   - name: 'hashicorp/terraform:latest'
-    args: ['validate']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        source /workspace/env.sh
+        terraform validate
     dir: '/workspace'
 
   # Step to plan Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['plan']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        source /workspace/env.sh
+        terraform plan
     dir: '/workspace'
 
   # Step to apply Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-auto-approve', '-var', 'credentials=$_TERA_JSON']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        source /workspace/env.sh
+        terraform apply -auto-approve
     dir: '/workspace'
