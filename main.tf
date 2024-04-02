@@ -1,7 +1,12 @@
 provider "google" {
-  credentials = jsondecode(file("/secrets/terra_sec.json"))
+  credentials = jsondecode(var.my_credentials)
   project     = "able-river-419007"
   region      = "us-central1"
+}
+
+variable "my_credentials" {
+  type    = string
+  default = ""
 }
 
 resource "google_compute_instance" "demo-instance" {
