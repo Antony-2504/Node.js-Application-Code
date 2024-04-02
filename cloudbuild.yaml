@@ -6,40 +6,26 @@ steps:
 
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        echo "export TF_VAR_credentials=\$$_TERA_JSON" >> /workspace/env.sh
-    env:
-      - '_TERA_JSON=$_TERA_JSON'
+    args: ['init']
+    dir: '/workspace'
+
+  # Step to provide credentials to Terraform
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['kms', 'decrypt', '--ciphertext-file=/secrets/terra_sec.enc', '--plaintext-file=/secrets/terra_sec.json', '--project=880914408187', '--location=global', '--keyring=my-keyring', '--key=my-key']
+  - name: 'hashicorp/terraform:latest'
+    args: ['init', '-backend-config=path.module=/secrets/terra_sec.json', '-input=false']
+    dir: '/workspace'
 
   # Step to validate Terraform configuration
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        source /workspace/env.sh
-        terraform validate
+    args: ['validate']
     dir: '/workspace'
 
   # Step to plan Terraform changes
   - name: 'hashicorp/terraform:latest'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        source /workspace/env.sh
-        terraform plan
+    args: ['plan', '-input=false']
     dir: '/workspace'
 
-  # Step to apply Terraform changes
-  - name: 'hashicorp/terraform:latest'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        source /workspace/env.sh
-        terraform apply -auto-approve
-    dir: '/workspace'
+secrets:
+  - kmsKeyName: projects/880914408187/locations/global/keyRings/my-keyring/cryptoKeys/my-key
+    secretName: projects/880914408187/secrets/terra_sec
