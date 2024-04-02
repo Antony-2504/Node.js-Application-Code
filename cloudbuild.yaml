@@ -27,14 +27,14 @@ steps:
   # Step to plan Terraform changes
   - name: 'hashicorp/terraform:latest'
     entrypoint: 'bash'
-    args: ['plan', '-var', 'my_credentials=$TERRA_SEC']
+    args: ['plan', '-var', 'my_credentials=${_TERRA_SEC}']
     dir: '/workspace'
 
   # Step to apply Terraform changes
   - name: 'hashicorp/terraform:latest'
     entrypoint: 'bash'
-    args: ['apply', '-auto-approve', '-var', 'my_credentials=$TERRA_SEC']
+    args: ['apply', '-auto-approve', '-var', 'my_credentials=${_TERRA_SEC}']
     dir: '/workspace'
 
 options:
-  env: ['TERRA_SEC']
+  secretEnv: ['TERRA_SEC']
