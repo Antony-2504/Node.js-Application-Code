@@ -4,22 +4,42 @@ steps:
     args: ['clone', 'https://$_GITHUB_TOKEN@github.com/Antony-2504/Node.js-Application-Code.git']
     dir: '/workspace'
 
+  # Step to set environment variable for the JSON key
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo 'export TF_VAR_credentials=$$_TERA_JSON' >> $BASH_ENV
+
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
-    args: ['init']
-    dir: '/workspace'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        terraform init
 
   # Step to validate Terraform configuration
   - name: 'hashicorp/terraform:latest'
-    args: ['validate']
-    dir: '/workspace'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        terraform validate
 
   # Step to plan Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['plan']
-    dir: '/workspace'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        terraform plan
 
   # Step to apply Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-auto-approve']
-    dir: '/workspace'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        terraform apply -auto-approve
