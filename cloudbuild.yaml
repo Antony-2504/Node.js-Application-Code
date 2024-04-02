@@ -4,14 +4,6 @@ steps:
     args: ['clone', 'https://$_GITHUB_TOKEN@github.com/Antony-2504/Node.js-Application-Code.git']
     dir: '/workspace'
 
-  # Step to fetch the secret from Secret Manager and store it in a file
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gcloud secrets versions access 1 --secret=terra_sec --project=880914408187 > /workspace/secrets/terra_sec.json
-
   # Step to initialize Terraform
   - name: 'hashicorp/terraform:latest'
     args: ['init']
