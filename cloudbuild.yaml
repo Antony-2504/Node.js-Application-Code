@@ -8,13 +8,10 @@ steps:
   - name: 'hashicorp/terraform:latest'
     args: ['init']
     dir: '/workspace'
-
-  # Step to provide credentials to Terraform
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['kms', 'decrypt', '--ciphertext-file=/secrets/terra_sec.enc', '--plaintext-file=/secrets/terra_sec.json', '--project=880914408187', '--location=global', '--keyring=my-keyring', '--key=my-key']
-  - name: 'hashicorp/terraform:latest'
-    args: ['init', '-backend-config=path.module=/secrets/terra_sec.json', '-input=false']
-    dir: '/workspace'
+    secretManager:
+      secrets:
+        - versionName: projects/880914408187/secrets/terra_sec/versions/1
+          env: 'TF_VAR_credentials'
 
   # Step to validate Terraform configuration
   - name: 'hashicorp/terraform:latest'
@@ -23,9 +20,5 @@ steps:
 
   # Step to plan Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['plan', '-input=false']
+    args: ['plan']
     dir: '/workspace'
-
-secrets:
-  - kmsKeyName: projects/880914408187/locations/global/keyRings/my-keyring/cryptoKeys/my-key
-    secretName: projects/880914408187/secrets/terra_sec
