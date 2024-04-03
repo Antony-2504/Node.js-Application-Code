@@ -28,3 +28,4 @@ resource "google_compute_instance" "demo-instance" {
       // Ephemeral IP
     }
   }
+}
