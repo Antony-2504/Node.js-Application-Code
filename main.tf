@@ -38,4 +38,3 @@ resource "google_compute_instance" "demo12-instance" {
   EOF
 }
 
-
