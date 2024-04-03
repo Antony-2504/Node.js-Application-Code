@@ -12,7 +12,7 @@ provider "google" {
 }
 
 resource "google_compute_instance" "demo12-instance" {
-  name         = "demo1-instance"
+  name         = "demo12-instance"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
