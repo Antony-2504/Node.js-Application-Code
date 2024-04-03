@@ -33,7 +33,7 @@ resource "google_compute_instance" "demo12-instance" {
     #!/bin/bash
     apt-get update
     apt-get install -y apache2
-    echo 'Hello, World!' > /var/www/html/index.html
+    echo 'Vanakkam da Mapla!' > /var/www/html/index.html
     systemctl restart apache2
   EOF
 }
