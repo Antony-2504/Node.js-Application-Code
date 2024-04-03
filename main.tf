@@ -1,3 +1,10 @@
+terraform {
+  backend "gcs" {
+    bucket  = "tera02"
+    prefix  = "terraform/state"
+  }
+}
+
 provider "google" {
   credentials = file("/workspace/secrets/tera_sec.json")
   project     = "able-river-419007"
@@ -22,12 +29,11 @@ resource "google_compute_instance" "demo-instance" {
     }
   }
 
-  metadata_startup_script = "echo 'Hello, World!' > /var/www/html/index.html && sudo service apache2 restart"
-}
-
-# Add a resource to delete the instance
-resource "null_resource" "delete_instance" {
-  provisioner "local-exec" {
-    command = "terraform destroy -target=google_compute_instance.demo-instance"
-  }
+  metadata_startup_script = <<-EOF
+    #!/bin/bash
+    apt-get update
+    apt-get install -y apache2
+    echo 'Hello, World!' > /var/www/html/index.html
+    systemctl restart apache2
+  EOF
 }
