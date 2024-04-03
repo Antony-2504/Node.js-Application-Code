@@ -1,39 +1,35 @@
-terraform {
-  backend "gcs" {
-    bucket  = "tera02"
-    prefix  = "terraform/state"
-  }
-}
+steps:
+  # Step to check out the code from GitHub
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://$_GITHUB_TOKEN@github.com/Antony-2504/Node.js-Application-Code.git']
+    dir: '/workspace'
 
-provider "google" {
-  credentials = file("/workspace/secrets/tera_sec.json")
-  project     = "able-river-419007"
-  region      = "us-central1"
-}
+  # Step to create the /workspace/secrets directory
+  - name: 'bash'
+    args:
+      - '-c'
+      - 'mkdir -p /workspace/secrets'
 
-resource "google_compute_instance" "demo-instance" {
-  name         = "demo-instance"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
+  # Step to copy the JSON key from Cloud Storage to /workspace/secrets/tera_sec.json
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://tera02/tera.json', '/workspace/secrets/tera_sec.json']
 
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-10"
-    }
-  }
+  # Step to initialize Terraform
+  - name: 'hashicorp/terraform:latest'
+    args: ['init']
+    dir: '/workspace'
 
-  network_interface {
-    network = "default"
-    access_config {
-      // Ephemeral IP
-    }
-  }
+  # Step to validate Terraform configuration
+  - name: 'hashicorp/terraform:latest'
+    args: ['validate']
+    dir: '/workspace'
 
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    apt-get update
-    apt-get install -y apache2
-    echo 'Hello, World!' > /var/www/html/index.html
-    systemctl restart apache2
-  EOF
-}
+  # Step to plan Terraform changes
+  - name: 'hashicorp/terraform:latest'
+    args: ['plan']
+    dir: '/workspace'
+
+  # Step to apply Terraform changes
+  - name: 'hashicorp/terraform:latest'
+    args: ['apply', '-auto-approve']
+    dir: '/workspace'
