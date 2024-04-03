@@ -37,3 +37,5 @@ resource "google_compute_instance" "demo-instance" {
     systemctl restart apache2
   EOF
 }
+
+
