@@ -11,8 +11,8 @@ provider "google" {
   region      = "us-central1"
 }
 
-resource "google_compute_instance" "demo-instance" {
-  name         = "demo-instance"
+resource "google_compute_instance" "demo12-instance" {
+  name         = "demo12-instance"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
@@ -28,4 +28,12 @@ resource "google_compute_instance" "demo-instance" {
       // Ephemeral IP
     }
   }
+
+  metadata_startup_script = <<-EOF
+    #!/bin/bash
+    apt-get update
+    apt-get install -y apache2
+    echo 'Hello, World!' > /var/www/html/index.html
+    systemctl restart apache2
+  EOF
 }
