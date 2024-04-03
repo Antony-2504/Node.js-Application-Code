@@ -29,12 +29,12 @@ steps:
     args: ['plan']
     dir: '/workspace'
 
-  # Step to apply Terraform changes
-  - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-auto-approve']
-    dir: '/workspace'
-
-  #   # Step to destroy Terraform resources (add this step to delete the VM instance)
+  # # Step to apply Terraform changes
   # - name: 'hashicorp/terraform:latest'
-  #   args: ['destroy', '-auto-approve']
+  #   args: ['apply', '-auto-approve']
   #   dir: '/workspace'
+
+    # Step to destroy Terraform resources (add this step to delete the VM instance)
+  - name: 'hashicorp/terraform:latest'
+    args: ['destroy', '-auto-approve']
+    dir: '/workspace'
