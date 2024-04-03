@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket  = "tera02"
-    prefix  = "terraform/state"
+    prefix  = "terraform/state/demo-instance"
   }
 }
 
@@ -11,8 +11,8 @@ provider "google" {
   region      = "us-central1"
 }
 
-resource "google_compute_instance" "demo-instance" {
-  name         = "demo-instance"
+resource "google_compute_instance" "demo12-instance" {
+  name         = "demo1-instance"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
