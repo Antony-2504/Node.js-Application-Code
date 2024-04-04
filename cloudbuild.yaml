@@ -31,5 +31,5 @@ steps:
 
   # Step to apply Terraform changes
   - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-auto-approve']
+    args: ['destroy', '-auto-approve']
     dir: '/workspace'
