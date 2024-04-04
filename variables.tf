@@ -1,7 +1,7 @@
 variable "instance_name" {
   description = "Name of the GCP instance"
   type        = string
-  default     = "demo12-instance"
+  default     = "demo123-instance"
 }
 
 variable "machine_type" {
