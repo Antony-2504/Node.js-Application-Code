@@ -12,9 +12,9 @@ provider "google" {
 }
 
 resource "google_compute_instance" "demo12-instance" {
-  name         = "demo12-instance"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
+  name         = var.instance_name
+  machine_type = var.machine_type
+  zone         = var.zone
 
   boot_disk {
     initialize_params {
@@ -29,12 +29,5 @@ resource "google_compute_instance" "demo12-instance" {
     }
   }
 
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    apt-get update
-    apt-get install -y apache2
-    echo 'Vanakkam da Mapla!' > /var/www/html/index.html
-    systemctl restart apache2
-  EOF
+  metadata_startup_script = var.startup_script
 }
-
